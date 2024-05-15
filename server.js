@@ -1,4 +1,5 @@
 require('dotenv').config()
+require('express-async-errors')
 const express = require('express')
 const app = express()
 const path = require('path')
@@ -10,6 +11,7 @@ const corsOptions = require('./config/corsOptions')
 const connectDB = require('./config/dbConn')
 const mongoose = require('mongoose')
 const PORT = process.env.PORT || 4500
+
 
 connectDB()
 
@@ -24,6 +26,8 @@ app.use(cookieParser())
 app.use('/', express.static(path.join(__dirname, 'public')))
 
 app.use('/', require('./routes/root'))
+app.use('/auth', require('./routes/authRoutes'))
+app.use('/tasks', require('./routes/taskRoutes'))
 
 app.all('*', (req, res) => {
     res.status(404)
